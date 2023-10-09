@@ -2,6 +2,7 @@ name: Code quality
 
 on: [pull_requesr]
 
+
 jobs:
   code-quality:
     runs-on: ubuntu-latest
