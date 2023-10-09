@@ -1,25 +1,19 @@
-name: Django CI
+name: Code quality
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+on: [pull_requesr]
 
 jobs:
-  build:
+  code-quality:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python 
-      uses: actions/setup-python@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
       with:
         python-version: "3.11"
-    - name: Install Dependencies
+    - name: Install dependencies
       run: pip install black isort mypy ruff
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Run Tests
+    - name: Run linter
       run: black .
     - name: Run formatters
-      run: isort --check . && mypy --check . && ruff --check .
+      run: isort --check . && isort --check . && mypy --check . && ruff --check .
