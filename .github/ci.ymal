@@ -13,8 +13,8 @@ jobs:
       with:
         python-version: "3.11"
     - name: Install dependencies
-      run: pip install black isort ruff mypy
+      run: pip install black isort mypy ruff
     - name: Run linter
       run: black .
     - name: Run formatters
-      run: isort --check . && ruff --check . && mypy --check .
+      run: isort --check . && isort --check . && mypy --check . && ruff --check .

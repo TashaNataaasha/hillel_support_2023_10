@@ -1,8 +1,9 @@
 import json
-from django.http import JsonResponse
-from typing import Any
 from pprint import pprint as print
+from typing import Any
+
 import requests
+from django.http import JsonResponse
 from pydantic import BaseModel, Field
 
 API_KEY = "HDKIKI6WAC2J677G"
@@ -62,9 +63,11 @@ def fetch_currency_exchange_rates(
 def exchange_rates(request) -> JsonResponse:
     currency_from = request.GET.get("currency_from", "usd")
     currency_to = request.GET.get("currency_to", "uah")
-    result: AlphavantageCurrencyExchangeRatesResponse = fetch_currency_exchange_rates(
-        schema=AlphavantageCurrencyExchangeRatesRequest(
-            currency_from=currency_from, currency_to=currency_to
+    result: AlphavantageCurrencyExchangeRatesResponse = (
+        fetch_currency_exchange_rates(
+            schema=AlphavantageCurrencyExchangeRatesRequest(
+                currency_from=currency_from, currency_to=currency_to
+            )
         )
     )
 

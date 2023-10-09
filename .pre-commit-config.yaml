@@ -17,7 +17,7 @@ repos:
 
 
     - id: mypy
-      name: "make mypy"
+      name: ""Running static types checker""
       entry: mypy .
       language: system
       types: [python]
