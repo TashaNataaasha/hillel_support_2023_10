@@ -14,6 +14,6 @@ jobs:
       - name: Install dependencies
         run: pip install black isort mypy ruff
       - name: Run linter
-        run: black .
+        run: black -h .
       - name: Run formatters
         run: isort --check . && isort --check . && mypy --check . && ruff --check .
