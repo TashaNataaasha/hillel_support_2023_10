@@ -4,7 +4,7 @@ class User(models.Model):
     email = models.EmailField(max_length=40)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    role = models.ForeignKey()
+    role = models.IntegerField()
     
 class Role(models.Model):
     value = models.CharField(max_length=15)
