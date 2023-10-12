@@ -1,6 +1,6 @@
 name: Code quality
 
-on: [pull_requesr]
+on: [pull_request]
 
 jobs:
   code-quality:
