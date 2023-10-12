@@ -22,3 +22,4 @@ class Message(models.Model):
     body = models.CharField(max_length=255)
     issue = models.IntegerField()
     user = models.IntegerField(null=True)
+    
