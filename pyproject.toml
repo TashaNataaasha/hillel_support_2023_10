@@ -66,3 +66,7 @@ show_error_codes = true
 namespace_packages = true
 ignore_missing_imports = true
 check_untyped_defs = true
+
+[tool.ruff]
+line-length = 100
+
