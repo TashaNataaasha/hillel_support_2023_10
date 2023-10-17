@@ -1,6 +1,7 @@
 import json
-from django.http import JsonResponse
+
 from django.db import models
+from django.http import JsonResponse
 
 from .models import User
 
