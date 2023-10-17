@@ -65,6 +65,9 @@ warn_unused_ignores = true
 show_error_codes = true
 namespace_packages = true
 
+[pydantic-mypy]
+init_typed = true
+
 # Silint "type import errors" as our 3rd-party libs does not have types
 # Check: https://mypy.readthedocs.io/en/latest/config_file.html#import-discovery
 follow_imports = 'silent'
