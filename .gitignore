@@ -8,3 +8,7 @@ __pycache__/
 
 # Storages
 *.sqlite3
+
+# linters / checkers
+.mypy_cache/
+.ruff_cache/
