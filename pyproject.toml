@@ -1,5 +1,5 @@
 [tool.black]
-target-version = ['py37']
+target-version = ['py311']
 line-length = 79
 exclude = '''
 
@@ -16,6 +16,7 @@ exclude = '''
     | build
     | dist
     | venv
+    | deprecated
   )/
                      # the root of the project
 )
