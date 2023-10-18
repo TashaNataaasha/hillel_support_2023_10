@@ -116,6 +116,7 @@ exclude = [
     "venv",
     "Makefile",
     "migrations",
+    "deprecated"
 ]
 
 
