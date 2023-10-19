@@ -10,7 +10,9 @@ ROOT_DIR = SRC_DIR.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # TODO: Move?
-SECRET_KEY = "django-insecure-8py68-0=k5%sp4_yk2^=de*^ga&q3mo#$%4h(gk+$_-0f!^!$o"
+SECRET_KEY = (
+    "django-insecure-8py68-0=k5%sp4_yk2^=de*^ga&q3mo#$%4h(gk+$_-0f!^!$o"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
