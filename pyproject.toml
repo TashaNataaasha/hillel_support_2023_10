@@ -1,5 +1,5 @@
 [tool.black]
-target-version = ['py10']
+target-version = ['py311']
 line-length = 79
 exclude = '''
 
@@ -16,6 +16,7 @@ exclude = '''
     | build
     | dist
     | venv
+    | deprecated
   )/
                      # the root of the project
 )
@@ -27,7 +28,7 @@ multi_line_output = 3
 include_trailing_comma = true
 force_grid_wrap = 0
 use_parentheses = true
-line_length = 88
+line_length = 120
 skip = '.venv,venv,env,migrations'
 src_paths = ["src"]
 
@@ -55,22 +56,81 @@ omit = [
 
 [tool.mypy]
 plugins = [
-    "pydantic.mypy"
+
 ]
-python_version = '3.10'
-mypy_path = 'src'
+python_version = '3.11'
 files = ['*.py',]
 warn_redundant_casts = true
 warn_unused_ignores = true
 show_error_codes = true
 namespace_packages = true
+exclude = ["migrations"]
+ignore_missing_imports = true
+check_untyped_defs = true
 
 # Silint "type import errors" as our 3rd-party libs does not have types
 # Check: https://mypy.readthedocs.io/en/latest/config_file.html#import-discovery
 follow_imports = 'silent'
 
 [[tool.mypy.overrides]]
-module = [
-    'mixer.*',
-]
+module = []
 ignore_missing_imports = true
+
+
+[tool.pyright]
+exclude = ["**/__pycache__", "**/venv/*", "**/migrations/*"]
+typeCheckingMode = "strict"  # off, basic, strict
+useLibraryCodeForTypes = true
+
+
+[tool.ruff]
+# Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
+select = ["E", "F"]
+ignore = []
+
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+fixable = ["A", "B", "C", "D", "E", "F", "G", "I", "N", "Q", "S", "T", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "EM", "ERA", "EXE", "FBT", "ICN", "INP", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PTH", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "TRY", "UP", "YTT"]
+unfixable = []
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".mypy_cache",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "__pycache_",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "venv",
+    "Makefile",
+    "migrations",
+    "deprecated"
+]
+
+
+# Same as Black.
+line-length = 100
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+# Assume Python 3.11.
+target-version = "py311"
+
+
+[tool.ruff.mccabe]
+# Unlike Flake8, default to a complexity level of 10.
+max-complexity = 10
