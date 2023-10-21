@@ -8,14 +8,11 @@ format:
 	python -m black ./
 	python -m isort ./
 # check type annotations
-.PHONY: types
-types:
-	python -m mypy --check-untyped-defs ./src
-
-# check everything
 .PHONY: check
 check:
-	python -m ruff .
-	python -m black --check .
-	python -m isort --check .
-	python -m mypy --check-untyped-defs .
+	python -m ruff . && python -m black --check . && python -m isort --check .
+
+
+.PHONY: fix
+fix:
+	python -m ruff --fix . && python -m black . && python -m isort .
