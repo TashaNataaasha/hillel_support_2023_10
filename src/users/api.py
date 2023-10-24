@@ -1,8 +1,7 @@
 import json
-
 from django.http import JsonResponse
-from rest_framework import permissions, serializers
 from rest_framework.generics import CreateAPIView, GenericAPIView
+from rest_framework import serializers, permissions
 
 from .models import User
 

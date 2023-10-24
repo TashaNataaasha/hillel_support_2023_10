@@ -1,5 +1,5 @@
-from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.db import models
+from django.contrib.auth.models import AbstractUser, PermissionsMixin
 
 from .constants import Role
 from .managers import UserManager
@@ -14,9 +14,7 @@ class User(AbstractUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
-    role = models.CharField(
-        max_length=2, default=Role.JUNIOR, choices=Role.choices()
-    )
+    role = models.CharField(max_length=2, default=Role.JUNIOR, choices=Role.choices())
 
     objects = UserManager()
 
