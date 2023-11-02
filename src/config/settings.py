@@ -10,7 +10,9 @@ ROOT_DIR = SRC_DIR.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # TODO: Move?
-SECRET_KEY = "django-insecure-8py68-0=k5%sp4_yk2^=de*^ga&q3mo#$%4h(gk+$_-0f!^!$o"
+SECRET_KEY = (
+    "django-insecure-8py68-0=k5%sp4_yk2^=de*^ga&q3mo#$%4h(gk+$_-0f!^!$o"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -121,13 +123,13 @@ AUTH_USER_MODEL = "users.User"
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated'
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated"
         # 'rest_framework.permissions.AllowAny'
     ],
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
 }
 
 APPEND_SLASH = False
@@ -135,5 +137,5 @@ APPEND_SLASH = False
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    "AUTH_HEADER_TYPES": ("Bearer",)
+    "AUTH_HEADER_TYPES": ("Bearer",),
 }

@@ -13,9 +13,7 @@ class IssueReadonlySerializer(serializers.ModelSerializer):
 
 class IssueCreateSerializer(serializers.ModelSerializer):
     status = serializers.CharField(required=False)
-    junior = serializers.HiddenField(
-        default=serializers.CurrentUserDefault()
-    )
+    junior = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     # junior = serializers.ModelField(...)
 
