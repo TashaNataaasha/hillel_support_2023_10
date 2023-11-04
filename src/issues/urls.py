@@ -1,10 +1,15 @@
 from django.urls import path
-from . import views
+from rest_framework.routers import DefaultRouter
 
-urlpatterns = [
-    path("create-issue/", views.create_issue, name="create_issue"),
-    path("issues/", views.get_issues, name="get_issues"),
-    path(
-        "issues/<int:issue_id>/", views.get_issue_by_id, name="get_issue_by_id"
-    ),
+from .api import IssueApiSet, MessageCreateAPI
+
+router = DefaultRouter()
+router.register("", IssueApiSet, basename="issues")
+# urlpatterns = router.urls
+
+messages_urls = [
+    path("<int:issue_id>/messages/create/", MessageCreateAPI.as_view()),
 ]
+
+
+urlpatterns = router.urls + messages_urls

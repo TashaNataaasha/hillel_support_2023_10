@@ -1,35 +1,25 @@
-from rest_framework.viewsets import ModelViewSet
-from rest_framework import serializers
+from rest_framework import permissions
 
-from .models import Issue
-from .constants import Status
+class IsParticipantOrAdmin(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        # Check if the user is an admin
+        if request.user.is_staff:
+            return True
+        
+        # Check if the user is a participant in the issue
+        return request.user in obj.issue.participants.all()
 
+from rest_framework import generics
 
-class IssueReadonlySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Issue
-        fields = "__all__"
+class IssueMessagesView(generics.ListCreateAPIView):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
+    permission_classes = [IsParticipantOrAdmin]
 
+    def get_queryset(self):
+        issue_id = self.kwargs['issue_id']
+        return Message.objects.filter(issue_id=issue_id)
 
-class IssueCreateSerializer(serializers.ModelSerializer):
-    status = serializers.CharField(required=False)
-    junior = serializers.HiddenField(default=serializers.CurrentUserDefault())
-
-    # junior = serializers.ModelField(...)
-
-    class Meta:
-        model = Issue
-        fields = ["id", "title", "body", "junior", "status"]
-
-    def validate(self, attrs: dict) -> dict:
-        attrs["status"] = Status.OPENED
-        return attrs
-
-
-class IssueApiSet(ModelViewSet):
-    queryset = Issue.objects.all()
-
-    def get_serializer_class(self):
-        if self.action == "create":
-            return IssueCreateSerializer
-        return IssueReadonlySerializer
+    def perform_create(self, serializer):
+        issue_id = self.kwargs['issue_id']
+        serializer.save(issue_id=issue_id)
