@@ -1,25 +1,20 @@
-from rest_framework import permissions
-
-class IsParticipantOrAdmin(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
-        # Check if the user is an admin
-        if request.user.is_staff:
-            return True
-        
-        # Check if the user is a participant in the issue
-        return request.user in obj.issue.participants.all()
-
 from rest_framework import generics
+from .models import Message
+from .permissions import RoleIsSenior, RoleIsJunior, RoleIsAdmin, IssueParticipant
+from .serializers import MessageSerializer
 
-class IssueMessagesView(generics.ListCreateAPIView):
-    queryset = Message.objects.all()
+class CreateMessageAPIView(generics.CreateAPIView):
     serializer_class = MessageSerializer
-    permission_classes = [IsParticipantOrAdmin]
-
-    def get_queryset(self):
-        issue_id = self.kwargs['issue_id']
-        return Message.objects.filter(issue_id=issue_id)
+    permission_classes = [RoleIsSenior | RoleIsJunior | RoleIsAdmin & IssueParticipant]
 
     def perform_create(self, serializer):
-        issue_id = self.kwargs['issue_id']
-        serializer.save(issue_id=issue_id)
+        issue_id = self.kwargs.get('issue_id')
+        serializer.save(author=self.request.user, issue_id=issue_id)
+
+class ListIssueMessagesAPIView(generics.ListAPIView):
+    serializer_class = MessageSerializer
+    permission_classes = [RoleIsSenior | RoleIsJunior | RoleIsAdmin & IssueParticipant]
+
+    def get_queryset(self):
+        issue_id = self.kwargs.get('issue_id')
+        return Message.objects.filter(issue_id=issue_id)

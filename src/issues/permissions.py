@@ -1,7 +1,27 @@
 from rest_framework.permissions import BasePermission
+from users.constants import Role
 
-class IsParticipant(BasePermission):
+class RoleIsSenior(BasePermission):
     def has_permission(self, request, view):
-        issue_id = view.kwargs.get('issue_id')
-        issue = get_object_or_404(Issue, id=issue_id)
-        return issue.is_participant(request.user)
+        return request.user.role == Role.SENIOR
+
+    def has_object_permission(self, request, view, obj):
+        return request.user.role == Role.SENIOR
+
+class RoleIsJunior(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.role == Role.JUNIOR
+
+    def has_object_permission(self, request, view, obj):
+        return request.user.role == Role.JUNIOR
+
+class RoleIsAdmin(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.role == Role.ADMIN
+
+    def has_object_permission(self, request, view, obj):
+        return request.user.role == Role.ADMIN
+
+class IssueParticipant(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return (request.user == obj.junior) or (request.user == obj.senior)

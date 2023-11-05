@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import create_message, get_messages
+from .api import CreateMessageAPIView, ListIssueMessagesAPIView
 
 urlpatterns = [
-    path('issues/<int:issue_id>/messages/', create_message),
-    path('issues/<int:issue_id>/messages/', get_messages),
+    path('<int:issue_id>/messages/', CreateMessageAPIView.as_view(), name='create_message'),
+    path('<int:issue_id>/messages/', ListIssueMessagesAPIView.as_view(), name='issue_messages'),
 ]
