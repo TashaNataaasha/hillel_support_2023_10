@@ -1,27 +1,23 @@
 from django.shortcuts import get_object_or_404
-from django.http import JsonResponse
-from .models import Issue
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.response import Response
 
-# Creating an issue
-def create_issue(request):
-    if request.method == 'POST':
-        # Logic to create an issue
-        # Retrieve data from request and save it in the database
-        # ...
+from .models import Message
+from .permissions import IsParticipant
 
-# Getting a list of issues
-def get_issues(request):
-    if request.method == 'GET':
-        issues = Issue.objects.values('id', 'title', 'body', 'status')
-        return JsonResponse(list(issues), safe=False)
+@api_view(['POST'])
+@permission_classes([IsAuthenticated, IsParticipant])
+def create_message(request, issue_id):
+    issue = get_object_or_404(Issue, id=issue_id)
+    content = request.data.get('content')
+    message = Message.objects.create(issue=issue, content=content)
+    return Response({'message_id': message.id})
 
-# Retrieving a single issue by ID
-def get_issue_by_id(request, issue_id):
-    issue = get_object_or_404(Issue, pk=issue_id)
-    return JsonResponse({
-        'id': issue.id,
-        'title': issue.title,
-        'body': issue.body,
-        'status': issue.status,
-        
-    })
+@api_view(['GET'])
+@permission_classes([IsAuthenticated, IsParticipant | IsAdminUser])
+def get_messages(request, issue_id):
+    issue = get_object_or_404(Issue, id=issue_id)
+    messages = Message.objects.filter(issue=issue)
+    data = [{'id': message.id, 'content': message.content, 'created_at': message.created_at} for message in messages]
+    return Response(data)

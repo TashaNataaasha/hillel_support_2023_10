@@ -1,15 +1,7 @@
 from django.urls import path
-from rest_framework.routers import DefaultRouter
+from .views import create_message, get_messages
 
-from .api import IssueApiSet, MessageCreateAPI
-
-router = DefaultRouter()
-router.register("", IssueApiSet, basename="issues")
-# urlpatterns = router.urls
-
-messages_urls = [
-    path("<int:issue_id>/messages/create/", MessageCreateAPI.as_view()),
+urlpatterns = [
+    path('issues/<int:issue_id>/messages/', create_message),
+    path('issues/<int:issue_id>/messages/', get_messages),
 ]
-
-
-urlpatterns = router.urls + messages_urls
