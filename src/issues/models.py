@@ -1,20 +1,13 @@
-from django.contrib.auth.models import AbstractUser
 from django.db import models
-
-
-class CustomUser(AbstractUser):
-    ROLES = [
-        ("junior", "Junior"),
-        ("senior", "Senior"),
-        ("default", "Default"),
-    ]
-    role = models.CharField(max_length=10, choices=ROLES, default="default")
-
-
-from django.db import models
-
+from users.constants import Role
 
 class Issue(models.Model):
-    title = models.CharField(max_length=100)
-    body = models.TextField()
-    status = models.CharField(max_length=20)
+    # Your Issue model fields, including relationships with users (senior and junior)
+    senior = models.ForeignKey('YourUserModel', on_delete=models.CASCADE, related_name='senior_issues')
+    junior = models.ForeignKey('YourUserModel', on_delete=models.CASCADE, related_name='junior_issues')
+
+class Message(models.Model):
+    issue = models.ForeignKey(Issue, on_delete=models.CASCADE)
+    author = models.ForeignKey('YourUserModel', on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
