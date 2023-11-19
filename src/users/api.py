@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 from .models import ActivationKey, User
+from .signals import send_activation_email
 
 @csrf_exempt
 def activate_user(request):
@@ -13,13 +14,7 @@ def activate_user(request):
         user.save()
         activation_key.delete()
 
-        send_mail(
-            'Your email is successfully activated',
-            'Your email is successfully activated',
-            settings.DEFAULT_FROM_EMAIL,
-            [user.email],
-            fail_silently=False,
-        )
+        send_activation_success_email.delay(user.email)
 
         return JsonResponse({'message': 'User activated successfully'})
 
