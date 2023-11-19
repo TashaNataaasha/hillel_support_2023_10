@@ -1,17 +1,7 @@
-from django.contrib import admin
-from django.urls import path, include
-
-# # controller
-# def foo(request):
-#     data = get_message()  # model
-#     response = JsonResponse(data)  # JsonResponse is view
-#     # controller
-#     return response
-
+from django.urls import path
+from .api import activate_user
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("users/", include("users.urls")),
-    path("auth/", include("authentication.urls")),
-    path("issues/", include("issues.urls"))
+    # Other endpoints...
+    path('users/activate/', activate_user, name='activate_user'),
 ]
