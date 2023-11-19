@@ -1,57 +1,26 @@
-import json
 from django.http import JsonResponse
-from rest_framework.generics import CreateAPIView, GenericAPIView
-from rest_framework import serializers, permissions
-from django.contrib.auth.hashers import make_password
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import get_object_or_404
+from .models import ActivationKey, User
 
-from .models import User
+@csrf_exempt
+def activate_user(request):
+    if request.method == 'POST':
+        key = request.POST.get('key')
+        activation_key = get_object_or_404(ActivationKey, key=key)
+        user = activation_key.user
+        user.is_active = True
+        user.save()
+        activation_key.delete()
 
+        send_mail(
+            'Your email is successfully activated',
+            'Your email is successfully activated',
+            settings.DEFAULT_FROM_EMAIL,
+            [user.email],
+            fail_silently=False,
+        )
 
-# FBV
-def create(request):
-    if request.method != "POST":
-        raise NotImplementedError("Only POST requests")
+        return JsonResponse({'message': 'User activated successfully'})
 
-    data: dict = json.loads(request.body)
-    user: User = User.objects.create(**data)
-
-    if not user:
-        raise Exception("Can not create user")
-
-    # convert to dict
-    attrs = {"id", "email", "first_name", "last_name", "password", "role"}
-    payload = {attr: getattr(user, attr) for attr in attrs}
-
-    return JsonResponse(payload)
-
-
-class UserRegistrationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["email", "password", "first_name", "last_name"]
-        # fields = "__all__"
-
-    def validate(self, attrs: dict) -> dict:
-        attrs["password"] = make_password(attrs["password"])
-
-        return attrs
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["id", "email", "first_name", "last_name"]
-
-
-# CBF
-class UserCreateAPI(CreateAPIView):
-    serializer_class = UserRegistrationSerializer
-    permission_classes = [permissions.AllowAny]
-
-
-class UserRetrieveAPI(GenericAPIView):
-    serializer_class = UserRegistrationSerializer
-    queryset = User.objects.all()
-
-    def get(self, request):
-        return super().get(request)
+    return JsonResponse({'message': 'Invalid request method'})
